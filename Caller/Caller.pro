@@ -14,8 +14,8 @@ CONFIG   -= app_bundle
 
 TEMPLATE = app
 
-
 SOURCES += main.cpp
+
 
 unix:!symbian|win32: LIBS += -L$$OUT_PWD/../ClsLib/ -lClsLib
 

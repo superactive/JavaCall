@@ -1,5 +1,6 @@
 #include <iostream>
 #include "clslib.h"
+#include "clsimpl.h"
 
 using namespace std;
 
@@ -25,4 +26,12 @@ std::string ClsLib::getName() {
 
 void ClsLib::hello_virtual() {
     cout << "hello from clslib." << endl;
+}
+
+ClsApi *ClsApi::create() {
+    return new ClsImpl;
+}
+
+void ClsApi::destroy(ClsApi *api) {
+    delete api;
 }

@@ -1,9 +1,3 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2012-08-18T17:23:03
-#
-#-------------------------------------------------
-
 QT       -= core gui
 
 TARGET = ClsLib
@@ -11,20 +5,12 @@ TEMPLATE = lib
 
 DEFINES += CLSLIB_LIBRARY
 
-SOURCES += clslib.cpp
+SOURCES += clslib.cpp \
+    clsimpl.cpp
 
 HEADERS += clslib.h\
-        ClsLib_global.h
-
-symbian {
-    MMP_RULES += EXPORTUNFROZEN
-    TARGET.UID3 = 0xE334285F
-    TARGET.CAPABILITY = 
-    TARGET.EPOCALLOWDLLDATA = 1
-    addFiles.sources = ClsLib.dll
-    addFiles.path = !:/sys/bin
-    DEPLOYMENT += addFiles
-}
+        ClsLib_global.h \
+    clsimpl.h
 
 unix:!symbian {
     maemo5 {
