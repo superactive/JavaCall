@@ -1,0 +1,74 @@
+package ctpdemo;
+
+import ctp.api.CThostFtdcMdApi;
+import ctp.api.CShfeFtdcRiskUserApi;
+import ctp.api.CThostFtdcTraderApi;
+import ctp.api.THOST_TE_RESUME_TYPE;
+
+public class CtpJavaCaller {
+    public static int requestId=0;
+
+    public static String mdFront    = "tcp://asp-sim1-front1.financial-trading-platform.com:41213";
+    public static String tradeFront = "tcp://asp-sim1-front1.financial-trading-platform.com:41205";
+    public static String riskFront  = "tcp://asp-sim1-front1.financial-trading-platform.com:50001";
+
+    public static String appId    = "2030";
+    public static String userId   = "0000000624";
+    public static String riskUser = "demo";
+    public static String passwd   = "asdfgh";
+
+    static {
+        try{
+            System.loadLibrary("riskuserapi");
+            System.loadLibrary("thostmduserapi");
+            System.loadLibrary("thosttraderapi");
+        } catch (UnsatisfiedLinkError e) {
+            System.err.println("Native code library failed to load.\n" + e);
+            System.exit(1);
+        }
+    }
+    public static void main( String[] args ) {
+        System.out.println( "Hello World!" );
+        testMd();
+        testOrder();
+        testRisk();
+    }
+
+    public static void testMd() {
+        CThostFtdcMdApi pUserApi = CThostFtdcMdApi.CreateFtdcMdApi();
+        CtpMdSpi pUserSpi = new CtpMdSpi(CThostFtdcMdApi.getCPtr(pUserApi), true); //ŽŽœš»Øµ÷ŽŠÀíÀà¶ÔÏóMdSpi
+        pUserApi.RegisterSpi(pUserSpi);			// »Øµ÷¶ÔÏó×¢ÈëœÓ¿ÚÀà
+        pUserApi.RegisterFront(mdFront);		  // ×¢²áÐÐÇéÇ°ÖÃµØÖ·
+
+        pUserApi.Init();
+  //      ShowMdCommand(pUserSpi,true);
+        pUserApi.Join();
+        pUserApi.Release();
+    }
+
+    public static void testOrder() {
+        CThostFtdcTraderApi pUserApi = CThostFtdcTraderApi.CreateFtdcTraderApi();
+        CtpTraderSpi pUserSpi = new CtpTraderSpi(pUserApi);
+        pUserApi.RegisterSpi(pUserSpi);			// ×¢²áÊÂŒþÀà
+        pUserApi.SubscribePublicTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);					// ×¢²á¹«ÓÐÁ÷
+        pUserApi.SubscribePrivateTopic(THOST_TE_RESUME_TYPE.THOST_TERT_RESTART);			  // ×¢²áËœÓÐÁ÷
+        pUserApi.RegisterFront(tradeFront);							// ×¢²áœ»Ò×Ç°ÖÃµØÖ·
+//
+       pUserApi.Init();
+//        ShowTraderCommand(pUserSpi,true);
+        pUserApi.Join();
+        pUserApi.Release();
+    }
+//
+    public static void testRisk() {
+        CShfeFtdcRiskUserApi pUserApi = CShfeFtdcRiskUserApi.CreateFtdcRiskUserApi();
+        CtpRiskSpi pUserSpi = new CtpRiskSpi(pUserApi);
+        pUserApi.RegisterSpi(pUserSpi);
+        pUserApi.RegisterFront(riskFront);
+
+        pUserApi.Init();
+       // ShowRiskCommand(pUserSpi,true);
+        pUserApi.Join();
+        pUserApi.Release();
+    }
+}
