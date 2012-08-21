@@ -1,9 +1,7 @@
 TEMPLATE = subdirs
+SUBDIRS += ClsLib Caller
 
-SUBDIRS += \
-    ClsLib \
-    Caller
-
+message(Building.)
 
 
 

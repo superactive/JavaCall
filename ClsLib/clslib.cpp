@@ -1,28 +1,24 @@
-#include <iostream>
 #include "clslib.h"
 
-using namespace std;
+class ClsImpl : public ClsApi {
+public:
+    virtual void init() {}
+    virtual void registerSpi(ClsSpi *spi) {
+       mSpi = spi;
+    }
 
-ClsLib *ClsLib::create() {
-    return new ClsLib();
+    virtual int reqLogin(int loginId) {
+        mSpi->onLogin(loginId);
+        return 0;
+    }
+private:
+   ClsSpi *mSpi;
+};
+
+ClsApi *ClsApi::create() {
+    return new ClsImpl;
 }
 
-void ClsLib::destroy(ClsLib *clslib) {
-    delete clslib;
-}
-
-ClsLib::~ClsLib() {
-
-}
-
-ClsLib::ClsLib() {
-    mName = "clslib";
-}
-
-std::string ClsLib::getName() {
-    return mName;
-}
-
-void ClsLib::hello_virtual() {
-    cout << "hello from clslib." << endl;
+void ClsApi::destroy(ClsApi *api) {
+    delete api;
 }

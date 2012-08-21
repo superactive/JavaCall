@@ -1,23 +1,21 @@
-#-------------------------------------------------
-#
-# Project created by QtCreator 2012-08-18T17:26:05
-#
-#-------------------------------------------------
-
-QT       += core
-
-QT       -= gui
-
 TARGET = Caller
-CONFIG   += console
-CONFIG   -= app_bundle
+CONFIG   += console warn_on release
 
 TEMPLATE = app
 
-
 SOURCES += main.cpp
 
-unix:!symbian|win32: LIBS += -L$$OUT_PWD/../ClsLib/ -lClsLib
+unix {
+  LIBS += -L$$OUT_PWD/../ClsLib/ -lClsLib
+}
+
+win32 {
+  LIBS += -L$$OUT_PWD/../ClsLib/release/ -lClsLib
+}
 
 INCLUDEPATH += $$PWD/../ClsLib
 DEPENDPATH += $$PWD/../ClsLib
+
+!exists(main.cpp) {
+  error("No main.cpp file found")
+}
